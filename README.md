@@ -27,13 +27,13 @@ The compiled executables are placed in the corresponding build subfolders:
 ./build/C++20/imports
 ```
 
-## Running everythinga as Tests
-If CTest is eneabled, allexamples can be registerd as test and run with:
+## Running everything as Tests
+If CTest is enabled, all examples can be registerd as test and run with:
 ```bash
 cd build
 ctest --output-on-failure
 ```
 
 ## License
-This project is icensed under the MIT License (i.e. free to use, modify and share the code for learning and teaching)
+This project is licensed under the MIT License (i.e. free to use, modify and share the code for learning and teaching)
 
