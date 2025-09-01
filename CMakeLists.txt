@@ -1,6 +1,11 @@
 cmake_minimum_required(VERSION 3.15)
+project(CppExamples LANGUAGES CXX)
 
-project(ModernC++ LANGUAGES CXX)
+enable_testing()
 
-add_subdirectory(C++11)
+set(SUBDIRS C++11)
+
+foreach(SUBDIR ${SUBDIRS})
+    add_subdirectory(${SUBDIR})
+endforeach()
 
