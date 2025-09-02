@@ -15,7 +15,7 @@
  * functions (destructor, copy/move constructor, copy/move assignment), it needs to define
  * ALL of them to manage resources safely and consistently.
  */
-#include<iostream>
+#include <iostream>
 #include <cassert>
 
 class Arr
@@ -103,9 +103,7 @@ class Arr
 		size_ = rhs.size_;
 		arr_ = new int[size_];
 		for(int i = 0; i < rhs.size_; i++)
-		{
 			arr_[i] = rhs.arr_[i];
-		}
 
 		return *this;
 	}
@@ -133,27 +131,23 @@ int main()
 	assert(arr1.len() == 5);
 
 	std::cout << "===== Test 2: operator[] and len() =====\n";
-	for (int i = 0; i < arr1.len(); i++) {
+	for (int i = 0; i < arr1.len(); i++)
 		arr1[i] = i * 2;
-	}
-	for (int i = 0; i < arr1.len(); i++) {
+	for (int i = 0; i < arr1.len(); i++)
 		assert(arr1[i] == i * 2);
-	}
 
 	std::cout << "===== Test 3: Copy constructor =====\n";
 	Arr arr2(arr1); // copy constructor
 	assert(arr2.len() == arr1.len());
-	for (int i = 0; i < arr2.len(); i++) {
+	for (int i = 0; i < arr2.len(); i++)
 		assert(arr2[i] == arr1[i]);
-	}
 
 	std::cout << "===== Test 4: Assignment operator =====\n";
 	Arr arr3(3);
 	arr3 = arr1; // copy assignment
 	assert(arr3.len() == arr1.len());
-	for (int i = 0; i < arr3.len(); i++) {
+	for (int i = 0; i < arr3.len(); i++)
 		assert(arr3[i] == arr1[i]);
-	}
 
 	std::cout << "===== Test 5: operator+ (move constructor invoked) =====\n";
 	Arr arr4 = arr1 + arr2;
