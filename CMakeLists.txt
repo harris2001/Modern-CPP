@@ -4,6 +4,7 @@ project(CppExamples LANGUAGES CXX)
 enable_testing()
 
 set(SUBDIRS C++11)
+set(SUBDIRS C++17)
 
 foreach(SUBDIR ${SUBDIRS})
     add_subdirectory(${SUBDIR})
