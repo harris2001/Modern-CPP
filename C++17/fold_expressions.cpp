@@ -1,34 +1,71 @@
+/* 
+ * 4. FOLD EXPRESSIONS
+ *    
+ * Fold expressions provide the tools to apply BINARY OPERATORS to all elements in a
+ *      parameter pack without having of recursive template unpacking or intitializer tricks
+ *
+ * There are 4 forms of a fold expression:
+ *      (... OP pack)             // Unary right fold  =>  ((arg1 [+] arg2) [+] ...)
+ *      (pack OP ...)             // Unary left fold   =>  (... [+] (arg2 [+] arg3))
+ *      (init OP ... OP pack)     // Binary left fold  => ((init [+] arg1) [+] arg2) [+] ...) 
+ *      (pack OP ... OP init)     // Binary right fold =>  (... [+] (arg2 [+] (arg3 [+] init)))  
+ */
 #include <iostream>
 #include <vector>
 #include <set>
 #include <string>
-//#include <print> // Needs to be included if we are using C++23 print function
+#include <cassert>
+#include <sstream>
 
-//size_t... I is a std::integer_sequence whose values are specified by a non-type template
+//(size_t... I) is a std::integer_sequence whose values are specified by a non-type template
 template<typename TupleT, size_t... IdxT>
-void print(const TupleT& tupl, std::index_sequence<IdxT...>){
+std::string print(const TupleT& tupl, std::index_sequence<IdxT...>){
 	//This experssion (..., operator) folds the tuple by applying operator to
 	// each of its elements going from left to right
-	std::cout << "(";
-	(..., (std::cout << (IdxT == 0 ? "" : ", ") << std::get<IdxT>(tupl)));
-	std::cout << ")\n";
+	std::ostringstream oss;
+	oss << "(";
+	(..., (oss << (IdxT == 0 ? "" : ", ") << std::get<IdxT>(tupl)));
+	oss << ")\n";
+	return oss.str();
 }
 
 // This is a non-type template that takes a tuple with multiple arguments of some type T
 template<typename... T>
-void printTuple(const std::tuple<T...>& tupl){
-	//std::make_integer_sequence creates a sequence of integers of size equal to the number of arguments of T 
-	print(tupl, std::make_index_sequence<sizeof...(T)>());
+std::string printTuple(const std::tuple<T...>& tupl){
+	// std::make_integer_sequence creates a sequence of integers of size equal to the number of arguments of T 
+	return print(tupl, std::make_index_sequence<sizeof...(T)>());
 }	
 
 int main(){
-	std::vector<std::tuple<std::string>> my_list = {("5","3","1"),("1","3","2"),("3","5","A"),("6","4","5")};
+	std::cout << "===== Test : Fold expressions applied to tuple printing =====\n";
 
-	auto a = std::make_index_sequence<4>();
-	for(auto tupl_ : my_list){
-		//std::cout << std::fmt("{}", my_list[i]) << std::endl; //For C++20 use format
-		//print("{}", my_list[i]); // For C++23 use print
-		printTuple(tupl_);
+	std::vector<std::tuple<std::string, std::string, std::string>> my_list = {
+		{"5","3","1"},
+		{"1","3","2"},
+		{"3","5","A"},
+		{"6","4","5"}
+	};
+
+	std::vector<std::string> expected_output = {"(5, 3, 1)\n",
+						    "(1, 3, 2)\n",
+						    "(3, 5, A)\n",
+						    "(6, 4, 5)\n"};
+	for(size_t i = 0; i < my_list.size(); i++)
+	{
+		const auto& tupl_ = my_list[i];
+		std::string result = printTuple(tupl_);  
+		if (result != expected_output[i]) 
+		{
+			std::cerr << "Failed on tuple " << i << ": got " << result 
+				  << " expected " << expected_output[i] << "\n";
+			assert(false);
+		}
+		// In C++20 use std::fmt as follows:
+		//      std::cout << std::fmt("{}", my_list[i]) << std::endl;
+		// In C++23 use std::print
+		//      print("{}", my_list[i]); 
 	}
+	std::cout << "All tuples verified successfully\n";
 	return 0;
 }
+
