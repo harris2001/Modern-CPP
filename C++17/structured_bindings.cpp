@@ -32,7 +32,8 @@ int main()
 	assert(num == 1);
 	assert(pi == 3.14);
 	assert(str == "something");
-
+	
+	std::cout << "Tuple decomposition was sucessful\n";
 
 	Point p{1, 2, 3};
 	// here we decompose a Point object into separate variables
@@ -40,6 +41,8 @@ int main()
 	assert(a == 1);
 	assert(b == 2);
 	assert(c == 3);
+
+	std::cout << "Point decomposition was successful \n";
 
 	return 0;
 }
